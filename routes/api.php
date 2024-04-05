@@ -34,6 +34,9 @@ Route::resource('users', 'App\Http\Controllers\User\UserController', ['except' =
 
 
 
+ 
+
+
 
 
 
