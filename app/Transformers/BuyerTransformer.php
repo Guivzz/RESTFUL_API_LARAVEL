@@ -15,7 +15,7 @@ class BuyerTransformer extends TransformerAbstract
     protected array $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -24,7 +24,7 @@ class BuyerTransformer extends TransformerAbstract
     protected array $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
@@ -40,11 +40,36 @@ class BuyerTransformer extends TransformerAbstract
             'creationDate' => (string)$buyer->created_at,
             'lastChange' => (string)$buyer->updated_at,
             'deleteDate' => isset($buyer->deleted_at) ? (string) $buyer->deleted_at : null,
+
+            'links' => [
+                'rel' => 'self',
+                'href' => route('buyers.show', $buyer->id),
+            ],
+            [
+                'rel' => 'buyers.categories',
+                'href' => route('buyers.categories.index', $buyer->id),
+            ],
+            [
+                'rel' => 'buyers.products',
+                'href' => route('buyers.products.index', $buyer->id),
+            ],
+            [
+                'rel' => 'buyers.sellers',
+                'href' => route('buyers.sellers.index', $buyer->id),
+            ],
+            [
+                'rel' => 'buyers.transactions',
+                'href' => route('buyers.transactions.index', $buyer->id),
+            ],
+            [
+                'rel' => 'buyers.show',
+                'href' => route('buyers.show', $buyer->id),
+            ],
         ];
     }
 
     public static function originalAttribute($index)
-{
+    {
         $attributes = [
             'identifier' => 'id',
             'name' => 'name',

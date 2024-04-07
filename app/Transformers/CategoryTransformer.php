@@ -15,7 +15,7 @@ class CategoryTransformer extends TransformerAbstract
     protected array $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -24,7 +24,7 @@ class CategoryTransformer extends TransformerAbstract
     protected array $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
@@ -39,6 +39,23 @@ class CategoryTransformer extends TransformerAbstract
             'creationDate' => (string)$category->created_at,
             'lastChange' => (string)$category->updated_at,
             'deleteDate' => isset($category->deleted_at) ? (string) $category->deleted_at : null,
+
+            'links' => [
+                'rel' => 'self',
+                'href' => route('categories.show', $category->id),
+            ],
+            [
+                'rel' => 'categories.buyers',
+                'href' => route('categories.buyers.index', $category->id),
+            ],
+            [
+                'rel' => 'categories.products',
+                'href' => route('categories.products.index', $category->id),
+            ],
+            [
+                'rel' => 'categories.transactions',
+                'href' => route('categories.transactions.index', $category->id),
+            ],
         ];
     }
 
@@ -54,5 +71,4 @@ class CategoryTransformer extends TransformerAbstract
         ];
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
-    
 }
