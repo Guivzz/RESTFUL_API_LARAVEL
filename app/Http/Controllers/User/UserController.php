@@ -14,13 +14,13 @@ class UserController extends ApiController
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $users = User::all();
+{
+    $users = User::all();
 
-        return response()->json(['data' => $users], 200);
-        //return $users;
-        
-    }
+    // Use showAll() method to handle collections
+    return $this->showAll($users, 200);
+}
+
 
 
     /**
@@ -44,7 +44,7 @@ class UserController extends ApiController
 
         $user = User::create($data);
 
-        return $this->showOne($user, 201);
+        return $this->showOne($user, 200);
     }
 
     /**
