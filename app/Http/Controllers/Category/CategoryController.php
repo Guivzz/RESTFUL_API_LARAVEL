@@ -4,10 +4,16 @@ namespace App\Http\Controllers\Category;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Category;
+use App\Transformers\CategoryTransformer;
 use Illuminate\Http\Request;
 
 class CategoryController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('transform.input:' . CategoryTransformer::class)->only(['store', 'upgrade']);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -53,7 +59,7 @@ class CategoryController extends ApiController
             'description',
         ]));
 
-        if(!$category->isDirty()) {
+        if (!$category->isDirty()) {
             return $this->errorResponse('You need to specify any different value to update', 422);
         }
 

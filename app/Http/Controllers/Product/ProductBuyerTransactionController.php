@@ -6,18 +6,24 @@ use App\Http\Controllers\ApiController;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Transformers\TransactionTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProductBuyerTransactionController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('transform.input:' . TransactionTransformer::class)->only(['store']);
+    }
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request, Product $product, User $buyer)
     {
         $rules = [
-          'quantity' =>'required|integer|min:1'  
+            'quantity' => 'required|integer|min:1'
         ];
 
         $this->validate($request, $rules);
@@ -30,7 +36,7 @@ class ProductBuyerTransactionController extends ApiController
             return $this->errorResponse('The buyer must be a verified user', 409);
         }
 
-        if (!$product->seller-> isVerified()) {
+        if (!$product->seller->isVerified()) {
             return $this->errorResponse('The seller must be a verified user', 409);
         }
 
@@ -42,18 +48,17 @@ class ProductBuyerTransactionController extends ApiController
             return $this->errorResponse('The product does not have enought units for this transaction ', 409);
         }
 
-        return DB::transaction(function() use ($request, $product, $buyer) {
-                $product->quantity -= $request->quantity;
-                $product->save();
+        return DB::transaction(function () use ($request, $product, $buyer) {
+            $product->quantity -= $request->quantity;
+            $product->save();
 
-                $transaction = Transaction::create([
-                    'quantity' => $request->quantity,
-                    'buyer_id' => $buyer->id,
-                    'product_id' =>$product->id,
-                ]);
-                
-                return $this->showOne($transaction, 201);
-            });
+            $transaction = Transaction::create([
+                'quantity' => $request->quantity,
+                'buyer_id' => $buyer->id,
+                'product_id' => $product->id,
+            ]);
+
+            return $this->showOne($transaction, 201);
+        });
     }
-
 }
