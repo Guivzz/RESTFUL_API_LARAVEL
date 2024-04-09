@@ -13,6 +13,7 @@ class ProductCategoryController extends ApiController
     {
         $this->middleware('client.credentials')->only(['index']);
         $this->middleware('auth:api')->except(['index']);
+        $this->middleware('scope: manage-product')->except(['index']);
     }
     /**
      * Display a listing of the resource.
@@ -39,7 +40,7 @@ class ProductCategoryController extends ApiController
      */
     public function destroy(Product $product, Category $category)
     {
-        if(!$product->categories()->find($category->id)) {
+        if (!$product->categories()->find($category->id)) {
             return $this->errorResponse('The specified category is not a category of this product', 404);
         }
 

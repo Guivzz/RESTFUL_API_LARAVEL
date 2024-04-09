@@ -1,3 +1,9 @@
+<style scoped>
+.action-link {
+    cursor: pointer;
+}
+</style>
+
 <template>
     <div>
         <div>
@@ -228,6 +234,8 @@
 </template>
 
 <script>
+import _ from "lodash";
+
 export default {
     /*
      * The component's data.
@@ -376,10 +384,3 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-/* Estilos do componente aqui */
-.action-link {
-    cursor: pointer;
-}
-</style>

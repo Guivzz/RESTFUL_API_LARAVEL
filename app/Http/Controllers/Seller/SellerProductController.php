@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 use App\Transformers\ProductTransformer;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -17,15 +18,21 @@ class SellerProductController extends ApiController
     {
         parent::__construct();
         $this->middleware('transform.input:' . ProductTransformer::class)->only(['store', 'upgrade']);
+        $this->middleware('scope: manage-product')->except('index');
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Seller $seller)
     {
-        $products = $seller->products;
+        if (request() - user()->tokenCan('read-general') || request()->user()->tokenCan('manage-products')) {
 
-        return $this->showAll($products);
+
+            $products = $seller->products;
+            return $this->showAll($products);
+        }
+
+        throw new AuthorizationException('Invalid Scope(s)');
     }
     /**
      * Store a newly created resource in storage.
