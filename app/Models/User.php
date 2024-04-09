@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens as PassportHasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, PassportHasApiTokens;
 
     const VERIFIED_USER = '1';
     const UNVERIFIED_USER = '0';
@@ -27,7 +27,7 @@ class User extends Authenticatable
     protected $dates = ['deleted_at'];
 
     protected $table = 'users';
- 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -54,39 +54,44 @@ class User extends Authenticatable
         'verification_token',
     ];
 
-    public function setNameAttribute($name) {
+    public function setNameAttribute($name)
+    {
         $this->attributes['name'] = strtolower($name);
     }
 
-    public function getNameAttribute($name) {
-         return ucwords($name);
+    public function getNameAttribute($name)
+    {
+        return ucwords($name);
     }
 
-    public function setEmailAttribute($email) {
+    public function setEmailAttribute($email)
+    {
         $this->attributes['email'] = strtolower($email);
     }
 
-    public function isVerified() {
+    public function isVerified()
+    {
         return $this->verified == User::VERIFIED_USER;
     }
 
-    public function isAdmin() {
+    public function isAdmin()
+    {
         return $this->admin == User::ADMIN_USER;
     }
 
-    public static function generateVerificationCode() {
+    public static function generateVerificationCode()
+    {
         return Str::random(40);
     }
-
 
     /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
      */
-      //protected $casts = [
-        //  'email_verified_at' => 'datetime',
-        //  'password' => 'hashed',
+    //protected $casts = [
+    //  'email_verified_at' => 'datetime',
+    //  'password' => 'hashed',
     //];
-    
+
 }

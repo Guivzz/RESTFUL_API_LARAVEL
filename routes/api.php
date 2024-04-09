@@ -53,8 +53,10 @@ Route::name('verify')->get('users/verify/{token}', 'App\Http\Controllers\User\Us
 Route::name('resend')->get('users/{user}/resend', 'App\Http\Controllers\User\UserController@resend');
 
 
+Route::post('oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
 
- 
+
+
 
 
 

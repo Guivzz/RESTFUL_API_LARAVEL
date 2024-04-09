@@ -31,3 +31,4 @@ password.reset');
 Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home/my-tokens', [App\Http\Controllers\HomeController::class, 'getTokens'])->name('personal-tokens');
