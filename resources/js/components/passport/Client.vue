@@ -106,7 +106,7 @@
                             type="button"
                             class="close"
                             data-dismiss="modal"
-                            aria-hidden="true"
+                            hidden="true"
                         >
                             &times;
                         </button>
@@ -215,7 +215,7 @@
                             type="button"
                             class="close"
                             data-dismiss="modal"
-                            aria-hidden="true"
+                            hidden="true"
                         >
                             &times;
                         </button>
